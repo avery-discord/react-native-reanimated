@@ -228,6 +228,31 @@ export default class JSReanimated {
     // noop
   }
 
+  subscribeForWindowEvents(_: ShareableRef<number>): number {
+    if (isWeb()) {
+      console.warn(
+        '[Reanimated] useAnimatedWindow is not available on web yet.'
+      );
+    } else if (isChromeDebugger()) {
+      console.warn(
+        '[Reanimated] useAnimatedWindow is not available when using Chrome Debugger.'
+      );
+    } else if (isJest()) {
+      console.warn(
+        '[Reanimated] useAnimatedWindow is not available when using Jest.'
+      );
+    } else {
+      console.warn(
+        '[Reanimated] useAnimatedWindow is not available on this configuration.'
+      );
+    }
+    return -1;
+  }
+
+  unsubscribeFromWindowEvents(_: number): void {
+    // noop
+  }
+
   initializeSensor(sensorType: SensorType, interval: number): WebSensor {
     const config =
       interval <= 0

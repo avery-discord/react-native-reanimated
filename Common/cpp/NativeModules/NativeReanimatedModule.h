@@ -151,6 +151,13 @@ class NativeReanimatedModule : public NativeReanimatedModuleSpec {
       jsi::Runtime &rt,
       const jsi::Value &listenerId) override;
 
+  jsi::Value subscribeForWindowEvents(
+      jsi::Runtime &rt,
+      const jsi::Value &keyboardEventContainer) override;
+  void unsubscribeFromWindowEvents(
+      jsi::Runtime &rt,
+      const jsi::Value &listenerId) override;
+
   inline LayoutAnimationsManager &layoutAnimationsManager() {
     return layoutAnimationsManager_;
   }
@@ -209,6 +216,9 @@ class NativeReanimatedModule : public NativeReanimatedModuleSpec {
 
   const KeyboardEventSubscribeFunction subscribeForKeyboardEventsFunction_;
   const KeyboardEventUnsubscribeFunction unsubscribeFromKeyboardEventsFunction_;
+
+  const WindowEventSubscribeFunction subscribeForWindowEventsFunction_;
+  const WindowEventUnsubscribeFunction unsubscribeFromWindowEventsFunction_;
 
 #ifdef DEBUG
   SingleInstanceChecker<NativeReanimatedModule> singleInstanceChecker_;

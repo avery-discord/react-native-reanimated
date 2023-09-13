@@ -3,6 +3,7 @@ import NativeReanimatedModule from './NativeReanimated';
 import { nativeShouldBeMock, isWeb } from './PlatformChecker';
 import type {
   AnimatedKeyboardOptions,
+  AnimatedWindowOptions,
   SensorConfig,
   SensorType,
   SharedValue,
@@ -124,6 +125,30 @@ export function subscribeForKeyboardEvents(
 
 export function unsubscribeFromKeyboardEvents(listenerId: number): void {
   return NativeReanimatedModule.unsubscribeFromKeyboardEvents(listenerId);
+}
+
+export function subscribeForWindowEvents(
+  eventHandler: (width: number, height: number, top: number, bottom: number, left: number, right: number) => void,
+  options: AnimatedWindowOptions
+): number {
+  // TODO: this should really go with the same code path as other events, that is
+  // via registerEventHandler. For now we are copying the code from there.
+  function handleAndFlushAnimationFrame(state: number, height: number) {
+    'worklet';
+    const now = performance.now();
+    global.__frameTimestamp = now;
+    eventHandler(state, height);
+    global.__flushAnimationFrame(now);
+    global.__frameTimestamp = undefined;
+  }
+  return NativeReanimatedModule.subscribeForWindowEvents(
+    makeShareableCloneRecursive(handleAndFlushAnimationFrame),
+    options.isStatusBarTranslucentAndroid ?? false
+  );
+}
+
+export function unsubscribeFromWindowEvents(listenerId: number): void {
+  return NativeReanimatedModule.unsubscribeFromWindowEvents(listenerId);
 }
 
 export function registerSensor(

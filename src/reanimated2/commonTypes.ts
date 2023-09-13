@@ -201,6 +201,15 @@ export type AnimatedKeyboardInfo = {
   state: SharedValue<KeyboardState>;
 };
 
+export type AnimatedWindowInfo = {
+  width: SharedValue<number>;
+  height: SharedValue<number>;
+  top: SharedValue<number>;
+  bottom: SharedValue<number>;
+  left: SharedValue<number>;
+  right: SharedValue<number>;
+};
+
 export interface MeasuredDimensions {
   x: number;
   y: number;
@@ -211,6 +220,10 @@ export interface MeasuredDimensions {
 }
 
 export interface AnimatedKeyboardOptions {
+  isStatusBarTranslucentAndroid?: boolean;
+}
+
+export interface AnimatedWindowOptions {
   isStatusBarTranslucentAndroid?: boolean;
 }
 

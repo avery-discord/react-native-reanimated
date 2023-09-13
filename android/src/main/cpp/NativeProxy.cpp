@@ -369,6 +369,26 @@ void NativeProxy::unsubscribeFromKeyboardEvents(int listenerId) {
   method(javaPart_.get(), listenerId);
 }
 
+int NativeProxy::subscribeForWindowEvents(
+    std::function<void(int, int, int, int, int, int)> windowEventDataUpdater,
+    bool isStatusBarTranslucent) {
+  static const auto method =
+      getJniMethod<int(WindowEventDataUpdater::javaobject, bool)>(
+          "subscribeForWindowEvents");
+  return method(
+      javaPart_.get(),
+      WindowEventDataUpdater::newObjectCxxArgs(
+          std::move(WindowEventDataUpdater))
+          .get(),
+      isStatusBarTranslucent);
+}
+
+void NativeProxy::unsubscribeFromWindowEvents(int listenerId) {
+  static const auto method =
+      getJniMethod<void(int)>("unsubscribeFromWindowEvents");
+  method(javaPart_.get(), listenerId);
+}
+
 double NativeProxy::getCurrentTime() {
   static const auto method = getJniMethod<jlong()>("getCurrentTime");
   jlong output = method(javaPart_.get());
@@ -466,6 +486,12 @@ PlatformDepMethodsHolder NativeProxy::getPlatformDependentMethods() {
   auto unsubscribeFromKeyboardEventsFunction =
       bindThis(&NativeProxy::unsubscribeFromKeyboardEvents);
 
+  auto subscribeForWindowEventsFunction =
+      bindThis(&NativeProxy::subscribeForWindowEvents);
+
+  auto unsubscribeFromWindowEventsFunction =
+      bindThis(&NativeProxy::unsubscribeFromWindowEvents);
+
   auto progressLayoutAnimation =
       bindThis(&NativeProxy::progressLayoutAnimation);
 
@@ -496,6 +522,8 @@ PlatformDepMethodsHolder NativeProxy::getPlatformDependentMethods() {
       setGestureStateFunction,
       subscribeForKeyboardEventsFunction,
       unsubscribeFromKeyboardEventsFunction,
+      subscribeForWindowEventsFunction,
+      unsubscribeFromWindowEventsFunction,
       maybeFlushUiUpdatesQueueFunction,
   };
 }

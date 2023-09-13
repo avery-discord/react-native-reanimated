@@ -668,4 +668,32 @@ void NativeReanimatedModule::unsubscribeFromKeyboardEvents(
   unsubscribeFromKeyboardEventsFunction_(listenerId.asNumber());
 }
 
+jsi::Value NativeReanimatedModule::subscribeForWindowEvents(
+    jsi::Runtime &rt,
+    const jsi::Value &handlerWorklet,
+    const jsi::Value &isStatusBarTranslucent) {
+  auto shareableHandler = extractShareableOrThrow<ShareableWorklet>(
+      rt,
+      handlerWorklet,
+      "[Reanimated] Window event handler must be a worklet.");
+  return subscribeForWindowEventsFunction_(
+      [=](int width, int height, int top, int bottom, int left, int right) {
+        uiWorkletRuntime_->runGuarded(
+            shareableHandler,
+            jsi::Value(width),
+            jsi::Value(height),
+            jsi::Value(top),
+            jsi::Value(bottom),
+            jsi::Value(left),
+            jsi::Value(right));
+      },
+      isStatusBarTranslucent.getBool());
+}
+
+void NativeReanimatedModule::unsubscribeFromWindowEvents(
+    jsi::Runtime &,
+    const jsi::Value &listenerId) {
+  unsubscribeFromWindowEventsFunction_(listenerId.asNumber());
+}
+
 } // namespace reanimated

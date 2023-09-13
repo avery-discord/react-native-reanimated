@@ -86,6 +86,15 @@ class JSI_EXPORT NativeReanimatedModuleSpec : public TurboModule {
       jsi::Runtime &rt,
       const jsi::Value &listenerId) = 0;
 
+  // window
+  virtual jsi::Value subscribeForWindowEvents(
+      jsi::Runtime &rt,
+      const jsi::Value &windowEventContainer,
+      const jsi::Value &isStatusBarTranslucent) = 0;
+  virtual void unsubscribeFromWindowEvents(
+      jsi::Runtime &rt,
+      const jsi::Value &listenerId) = 0;
+
   // other
   virtual jsi::Value enableLayoutAnimations(
       jsi::Runtime &rt,

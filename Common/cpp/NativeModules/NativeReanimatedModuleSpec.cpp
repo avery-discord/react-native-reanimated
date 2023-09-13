@@ -162,6 +162,25 @@ static jsi::Value SPEC_PREFIX(unsubscribeFromKeyboardEvents)(
   return jsi::Value::undefined();
 }
 
+static jsi::Value SPEC_PREFIX(subscribeForWindowEvents)(
+    jsi::Runtime &rt,
+    TurboModule &turboModule,
+    const jsi::Value *args,
+    size_t) {
+  return static_cast<NativeReanimatedModuleSpec *>(&turboModule)
+      ->subscribeForWindowEvents(rt, std::move(args[0]), std::move(args[1]));
+}
+
+static jsi::Value SPEC_PREFIX(unsubscribeFromWindowEvents)(
+    jsi::Runtime &rt,
+    TurboModule &turboModule,
+    const jsi::Value *args,
+    size_t) {
+  static_cast<NativeReanimatedModuleSpec *>(&turboModule)
+      ->unsubscribeFromWindowEvents(rt, std::move(args[0]));
+  return jsi::Value::undefined();
+}
+
 static jsi::Value SPEC_PREFIX(configureLayoutAnimation)(
     jsi::Runtime &rt,
     TurboModule &turboModule,
@@ -220,6 +239,10 @@ NativeReanimatedModuleSpec::NativeReanimatedModuleSpec(
       MethodMetadata{2, SPEC_PREFIX(subscribeForKeyboardEvents)};
   methodMap_["unsubscribeFromKeyboardEvents"] =
       MethodMetadata{1, SPEC_PREFIX(unsubscribeFromKeyboardEvents)};
+  methodMap_["subscribeForWindowEvents"] =
+      MethodMetadata{2, SPEC_PREFIX(subscribeForWindowEvents)};
+  methodMap_["unsubscribeFromWindowEvents"] =
+      MethodMetadata{1, SPEC_PREFIX(unsubscribeFromWindowEvents)};
 
   methodMap_["configureLayoutAnimation"] =
       MethodMetadata{4, SPEC_PREFIX(configureLayoutAnimation)};

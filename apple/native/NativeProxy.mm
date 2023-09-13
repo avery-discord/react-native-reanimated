@@ -9,6 +9,7 @@
 #import <RNReanimated/REAModule.h>
 #import <RNReanimated/REANodesManager.h>
 #import <RNReanimated/REASwizzledUIManager.h>
+#import <RNReanimated/REAWindowEventObserver.h>
 #import <RNReanimated/RNGestureHandlerStateManager.h>
 #import <RNReanimated/ReanimatedRuntime.h>
 #import <RNReanimated/ReanimatedSensorContainer.h>
@@ -264,6 +265,24 @@ std::shared_ptr<NativeReanimatedModule> createReanimatedModule(
   };
   // end keyboard events
 
+  // window events
+
+  REAWindowEventObserver *windowObserver = [[REAWindowEventObserver alloc] init];
+  auto subscribeForWindowEventsFunction =
+      [=](std::function<void(int width, int height, int top, int bottom, int left, int right)> windowEventDataUpdater,
+          bool isStatusBarTranslucent) {
+        // ignore isStatusBarTranslucent - it's Android only
+        return [windowObserver
+            subscribeForWindowEvents:^(int width, int height, int top, int bottom, int left, int right) {
+              windowEventDataUpdater(width, height, top, bottom, left right);
+            }];
+      };
+
+  auto unsubscribeFromWindowEventsFunction = [=](int listenerId) {
+    [windowObserver unsubscribeFromWindowEvents:listenerId];
+  };
+  // end window events
+
   PlatformDepMethodsHolder platformDepMethodsHolder = {
       requestRender,
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -284,6 +303,8 @@ std::shared_ptr<NativeReanimatedModule> createReanimatedModule(
       setGestureStateFunction,
       subscribeForKeyboardEventsFunction,
       unsubscribeFromKeyboardEventsFunction,
+      subscribeForWindowEventsFunction,
+      unsubscribeFromWindowEventsFunction,
       maybeFlushUIUpdatesQueueFunction,
   };
 

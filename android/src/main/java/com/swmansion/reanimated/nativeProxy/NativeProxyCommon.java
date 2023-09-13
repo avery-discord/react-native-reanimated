@@ -22,6 +22,7 @@ import com.swmansion.reanimated.NodesManager;
 import com.swmansion.reanimated.ReanimatedModule;
 import com.swmansion.reanimated.Utils;
 import com.swmansion.reanimated.keyboardObserver.ReanimatedKeyboardEventListener;
+import com.swmansion.reanimated.windowObserver.ReanimatedWindowEventListener;
 import com.swmansion.reanimated.layoutReanimation.AnimationsManager;
 import com.swmansion.reanimated.layoutReanimation.LayoutAnimations;
 import com.swmansion.reanimated.sensor.ReanimatedSensorContainer;
@@ -221,6 +222,18 @@ public abstract class NativeProxyCommon {
   @DoNotStrip
   public void unsubscribeFromKeyboardEvents(int listenerId) {
     reanimatedKeyboardEventListener.unsubscribeFromKeyboardEvents(listenerId);
+  }
+
+  @DoNotStrip
+  public int subscribeForWindowEvents(
+      WindowEventDataUpdater windowEventDataUpdater, boolean isStatusBarTranslucent) {
+    return reanimatedWindowEventListener.subscribeForWindowEvents(
+        keyboardEventDataUpdater, isStatusBarTranslucent);
+  }
+
+  @DoNotStrip
+  public void unsubscribeFromWindowEvents(int listenerId) {
+    reanimatedWindowEventListener.unsubscribeFromWindowEvents(listenerId);
   }
 
   protected abstract HybridData getHybridData();

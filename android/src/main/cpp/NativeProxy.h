@@ -142,6 +142,39 @@ class KeyboardEventDataUpdater : public HybridClass<KeyboardEventDataUpdater> {
   std::function<void(int, int)> callback_;
 };
 
+class WindowEventDataUpdater : public HybridClass<WindowEventDataUpdater> {
+ public:
+  static auto constexpr kJavaDescriptor =
+      "Lcom/swmansion/reanimated/nativeProxy/WindowEventDataUpdater;";
+
+  void windowEventDataUpdater(
+      int width,
+      int height,
+      int top,
+      int bottom,
+      int left,
+      int right) {
+    callback_(width, height, top, bottom, left, right);
+  }
+
+  static void registerNatives() {
+    javaClassStatic()->registerNatives({
+        makeNativeMethod(
+            "windowEventDataUpdater",
+            WindowEventDataUpdater::windowEventDataUpdater),
+    });
+  }
+
+ private:
+  friend HybridBase;
+
+  explicit WindowEventDataUpdater(
+      std::function<void(int, int, int, int, int, int)> callback)
+      : callback_(std::move(callback)) {}
+
+  std::function<void(int, int, int, int, int, int)> callback_;
+};
+
 class NativeProxy : public jni::HybridClass<NativeProxy> {
  public:
   static auto constexpr kJavaDescriptor =
@@ -209,6 +242,10 @@ class NativeProxy : public jni::HybridClass<NativeProxy> {
       std::function<void(int, int)> keyboardEventDataUpdater,
       bool isStatusBarTranslucent);
   void unsubscribeFromKeyboardEvents(int listenerId);
+  int subscribeForWindowEvents(
+      std::function<void(int, int, int, int, int, int)> windowEventDataUpdater,
+      bool isStatusBarTranslucent);
+  void unsubscribeFromWindowEvents(int listenerId);
 #ifdef RCT_NEW_ARCH_ENABLED
   // nothing
 #else

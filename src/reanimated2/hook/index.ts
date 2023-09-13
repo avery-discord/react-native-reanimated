@@ -30,6 +30,7 @@ export { useAnimatedSensor } from './useAnimatedSensor';
 export { useFrameCallback } from './useFrameCallback';
 export type { FrameCallback } from './useFrameCallback';
 export { useAnimatedKeyboard } from './useAnimatedKeyboard';
+export { useAnimatedWindow } from './useAnimatedWindow';
 export { useScrollViewOffset } from './useScrollViewOffset';
 export type {
   EventHandler,

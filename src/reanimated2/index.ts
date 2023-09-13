@@ -240,6 +240,8 @@ export {
   InterfaceOrientation,
   KeyboardState,
   ReduceMotion,
+  AnimatedWindowInfo,
+  AnimatedWindowOptions,
 } from './commonTypes';
 export type { FrameInfo } from './frameCallback';
 export { getUseOfValueInStyleWarning } from './pluginUtils';

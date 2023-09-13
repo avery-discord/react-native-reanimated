@@ -70,6 +70,9 @@ using ConfigurePropsFunction = std::function<void(
 using KeyboardEventSubscribeFunction =
     std::function<int(std::function<void(int, int)>, bool)>;
 using KeyboardEventUnsubscribeFunction = std::function<void(int)>;
+using WindowEventSubscribeFunction =
+    std::function<int(std::function<void(int, int, int, int, int, int)>, bool)>;
+using WindowEventUnsubscribeFunction = std::function<void(int)>;
 using MaybeFlushUIUpdatesQueueFunction = std::function<void()>;
 
 struct PlatformDepMethodsHolder {
@@ -92,6 +95,8 @@ struct PlatformDepMethodsHolder {
   SetGestureStateFunction setGestureStateFunction;
   KeyboardEventSubscribeFunction subscribeForKeyboardEvents;
   KeyboardEventUnsubscribeFunction unsubscribeFromKeyboardEvents;
+  WindowEventSubscribeFunction subscribeForWindowEvents;
+  WindowEventUnsubscribeFunction unsubscribeFromWindowEvents;
   MaybeFlushUIUpdatesQueueFunction maybeFlushUIUpdatesQueueFunction;
 };
 
