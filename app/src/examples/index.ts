@@ -117,6 +117,7 @@ import NestedLayoutAnimationConfig from './LayoutAnimations/NestedLayoutAnimatio
 import WithClampExample from './WithClampExample';
 import WorkletFactoryCrash from './WorkletFactoryCrashExample';
 import HabitsExample from './LayoutAnimations/HabitsExample';
+import TabsExample from './Tabs/TabsExample';
 
 interface Example {
   icon?: string;
@@ -125,6 +126,11 @@ interface Example {
 }
 
 export const EXAMPLES: Record<string, Example> = {
+  TabsExample: {
+    icon: '―',
+    title: 'Tabs',
+    screen: TabsExample,
+  },
   // Empty example for test purposes
 
   EmptyExample: {
